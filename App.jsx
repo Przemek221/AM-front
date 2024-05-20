@@ -1,58 +1,32 @@
-import React from 'react';
-import {
-    SafeAreaView,
-    ScrollView,
-    StatusBar,
-    StyleSheet,
-    Text,
-    useColorScheme,
-    View,
-} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import HomeScreen from "./src/screens/HomeScreen";
+import ProfileScreen from "./src/screens/ProfileScreen";
 
-import {
-    Colors,
-    DebugInstructions,
-    Header,
-    LearnMoreLinks,
-    ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-import Post from "./src/components/Post";
+const Stack = createNativeStackNavigator();
 
-function App() {
-    const isDarkMode = useColorScheme() === 'dark';
-
-    const backgroundStyle = {
-        backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-    };
+export default function App() {
+    let userSignedIn=true
 
     return (
-        <SafeAreaView style={backgroundStyle}>
-            <StatusBar
-                barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-                backgroundColor={backgroundStyle.backgroundColor}
-            />
-            <ScrollView
-                contentInsetAdjustmentBehavior="automatic"
-                style={backgroundStyle}>
-                <View>
-                    <Text style={styles.text}>
-                        Profile button, login button
-                    </Text>
-                </View>
-                <Post postData={{creator:'abc',likes:12}}> </Post>
-            </ScrollView>
-        </SafeAreaView>
+        <NavigationContainer>
+            <Stack.Navigator>
+                {userSignedIn
+                    ? <>
+                        <Stack.Screen
+                            name="Home"
+                            component={HomeScreen}
+                            // options={{title: 'Welcome'}}
+                        />
+                        <Stack.Screen name="Profile" component={ProfileScreen}/>
+                    </>
+                    : <>
+                        <Stack.Screen name="Login" component={LoginScreen}/>
+                        <Stack.Screen name="Register" component={RegisterScreen}/>
+                    </>
+                }
+            </Stack.Navigator>
+        </NavigationContainer>
     );
 }
-
-const styles = StyleSheet.create({
-    text: {
-        // width: 300,
-        alignSelf: 'stretch',
-        fontSize: 50,
-        backgroundColor: 'red',
-        marginTop: "auto",
-        marginBottom: "auto",
-    },
-});
-export default App;
