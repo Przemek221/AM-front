@@ -54,8 +54,8 @@ export default function HomeScreen() {
                 contentInsetAdjustmentBehavior="automatic"
                 style={backgroundStyle}>
                 <View>
-                    <NavigationButton title={"Profile"} destination={"Profile"}/>
-                    <NavigationButton title={"Login"} destination={"Login"}/>
+                    <NavigationButton destination={"Profile"}>Profile</NavigationButton>
+                    <NavigationButton destination={"Login"}>Login</NavigationButton>
                 </View>
                 <View>
                 {data ?

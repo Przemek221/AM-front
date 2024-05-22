@@ -2,6 +2,7 @@ import React from 'react';
 import {Image, StyleSheet, Text, View} from "react-native";
 import Comment from "./Comment";
 import {formatDate} from "../helpers";
+import {Avatar} from "react-native-paper";
 
 
 /**
@@ -19,9 +20,7 @@ export default function Post({creator, likes, createdDate, attachments, content,
     return <>
         <View style={{marginBottom: 15}}>
             <View>
-                <Image source={{uri: userprofile?.image}}
-                       style={styles.profileImage}
-                />
+                <Avatar.Image size={50} source={{uri: userprofile?.image}} />
                 <Text> {username}</Text>
             </View>
             <Text> {likes.length} likes </Text>
