@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { TextInput, Button } from 'react-native-paper';
+import React, {useState} from 'react';
+import {View, StyleSheet} from 'react-native';
+import {TextInput, Button} from 'react-native-paper';
+import NavigationButton from "../components/NavigationButton";
 
 const LoginScreen = () => {
     const [username, setUsername] = useState('');
@@ -12,26 +13,29 @@ const LoginScreen = () => {
     };
 
     return (
-        <View style={styles.container}>
-            <TextInput
-                label="Username"
-                value={username}
-                onChangeText={setUsername}
-                mode="outlined"
-                style={styles.input}
-            />
-            <TextInput
-                label="Password"
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry
-                mode="outlined"
-                style={styles.input}
-            />
-            <Button mode="contained" onPress={handleLogin} style={styles.button}>
-                Login
-            </Button>
-        </View>
+        <>
+            <View style={styles.container}>
+                <TextInput
+                    label="Username"
+                    value={username}
+                    onChangeText={setUsername}
+                    mode="outlined"
+                    style={styles.input}
+                />
+                <TextInput
+                    label="Password"
+                    value={password}
+                    onChangeText={setPassword}
+                    secureTextEntry
+                    mode="outlined"
+                    style={styles.input}
+                />
+                <Button mode="contained" onPress={handleLogin} style={styles.button}>
+                    Login
+                </Button>
+                <NavigationButton destination={"Register"} style={styles.button}>Register</NavigationButton>
+            </View>
+        </>
     );
 };
 
