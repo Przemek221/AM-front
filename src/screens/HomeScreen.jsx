@@ -8,6 +8,7 @@ import {
     useColorScheme,
     View,
 } from 'react-native';
+import {ActivityIndicator} from 'react-native-paper';
 
 import {
     Colors,
@@ -55,16 +56,16 @@ export default function HomeScreen() {
                 style={backgroundStyle}>
                 <View>
                     <NavigationButton destination={"Profile"}>Profile</NavigationButton>
-                    <NavigationButton destination={"Login"}>Login</NavigationButton>
+                    <NavigationButton destination={"CreatePost"}>CreatePost</NavigationButton>
                 </View>
                 <View>
-                {data ?
-                // (data?.results.map((post)=>(<Text key={post?.id}>{post?.content}</Text>))
-                (data?.results.map((post)=>(<Post key={post?.id} {...post}  />))
-                // console.log(data.results)
-                )
-                : (<Text style={styles.text}> Loading... </Text>)
-                }
+                    {data ?
+                        // (data?.results.map((post)=>(<Text key={post?.id}>{post?.content}</Text>))
+                        (data?.results.map((post) => (<Post key={post?.id} {...post}  />))
+                            // console.log(data.results)
+                        )
+                        : (<ActivityIndicator animating={true}/>)
+                    }
                 </View>
             </ScrollView>
         </SafeAreaView>
