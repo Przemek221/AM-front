@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
 import {Image, Platform, StyleSheet, View} from 'react-native';
-import {Dialog, Button, Portal, TextInput, Text, Provider} from 'react-native-paper';
+import {Dialog, Button, Portal, TextInput, Text, PaperProvider} from 'react-native-paper';
 import * as ImagePicker from 'react-native-image-picker';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {authTokenNames} from "../helpers";
 
-const App = () => {
+const CreatePostScreen = () => {
     const [photo, setPhoto] = useState(null);
     const [postDescription, setPostDescription] = useState("");
     const [dialog, setDialog] = useState({visible: false, content: ""});
@@ -60,7 +60,7 @@ const App = () => {
             });
     };
     return (
-        <Provider>
+        <>
             <Portal>
                 <Dialog visible={dialog.visible} onDismiss={() => setDialog({visible: false, content: ""})}>
                     <Dialog.Content>
@@ -68,69 +68,38 @@ const App = () => {
                     </Dialog.Content>
                 </Dialog>
             </Portal>
-            <View style={styles.wrapper}>
-                <View style={styles.photosWrapper}>
-                    <Button onPress={handleChoosePhoto} mode={"contained-tonal"} style={styles.add}>Add Photo</Button>
-                    <View style={styles.photosContainer}>
-                        {photo && (<Image source={{uri: photo.uri}} style={styles.photo}/>)}
-                    </View>
-                </View>
+            <View style={styles.container}>
                 <TextInput label="Description"
                            value={postDescription}
                            onChangeText={text => setPostDescription(text)}
                            style={styles.description}
                            multiline={true}
                 />
-                <Button onPress={handleSubmit} mode={"contained"} style={styles.create}>Create Post</Button>
+                <Button onPress={handleChoosePhoto} mode={"contained-tonal"} style={styles.button}>Add Photo</Button>
+                {photo && (<Image source={{uri: photo.uri}} style={styles.photo}/>)}
+                <Button onPress={handleSubmit} mode={"contained"} style={styles.button}>Create Post</Button>
             </View>
-        </Provider>
+        </>
     );
 };
-export default App;
+export default CreatePostScreen;
 
 const styles = StyleSheet.create({
-    wrapper: {
-        // display: "flex",
-        // position: "absolute",
-        // justifyContent: "center",
-        // flexDirection: "column",
-        padding: 10,
-        marginTop: "auto",
-        marginBottom: "auto",
-        width: "100%",
+    container: {
+        flex: 1,
+        padding: 20,
+        justifyContent: "center",
     },
-    create: {
-        width: 150,
-        marginLeft: "auto",
-        marginRight: "auto",
-    },
-    add: {
-        // width: "30%",
-        // height: 40,
-        // paddingVertical:"auto",
-        position: "absolute",
-        bottom: 0,
-        // marginLeft: "auto",
-        // marginRight: "auto",
-        // display: "flex",
+    button: {
+        marginTop: 10,
     },
     photo: {
-        width: 270,
+        width: "100%",
         height: 200,
+        resizeMode: "contain",
+        marginTop: 10,
     },
-    photosContainer: {
-        width: "70%",
-        display: "flex",
-        // flexDirection: "row-reverse",
-        marginRight:"30%",
-        overflow:"hidden"
-    },
-    photosWrapper: {
-        display: "flex",
-        flexDirection: "row-reverse",
-    },
-    description:{
-        marginVertical:15,
-        height:300,
+    description: {
+        marginBottom: 10,
     },
 });

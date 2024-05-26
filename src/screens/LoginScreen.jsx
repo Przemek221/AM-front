@@ -5,6 +5,7 @@ import NavigationButton from "../components/NavigationButton";
 import {authTokenNames} from "../helpers";
 import {AuthContext} from "../../App";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {debugLogin} from "../debug";
 
 const LoginScreen = () => {
     const [username, setUsername] = useState('');
@@ -59,13 +60,14 @@ const LoginScreen = () => {
                 </Button>
 
                 <Button mode="contained" onPress={() => {
-                    console.log("click")
-                    setUserSignedIn(true)
+                    // console.log("click")
+                    // setUserSignedIn(true)
+                    debugLogin(setUserSignedIn)
                 }} style={styles.button}>
-                    setUserSignedIn
+                    debugLogin
                 </Button>
 
-                <NavigationButton destination={"Register"} style={styles.button}>Register</NavigationButton>
+                {/*<NavigationButton destination={"Register"} style={styles.button}>Register</NavigationButton>*/}
             </View>
         </>
     );
@@ -86,3 +88,6 @@ const styles = StyleSheet.create({
 });
 
 export default LoginScreen;
+
+
+

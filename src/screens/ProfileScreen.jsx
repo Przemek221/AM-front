@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {
+    RefreshControl,
     SafeAreaView,
     ScrollView,
     View,
@@ -12,6 +13,7 @@ import {ActivityIndicator, Avatar, Card} from "react-native-paper";
 
 export default function ProfileScreen() {
     const [data, setData] = useState(null);
+    const [refresh, setRefresh] = useState(false);
     const getData = async () => {
         try {
             const token = await AsyncStorage.getItem(authTokenNames.access_token)
@@ -32,8 +34,8 @@ export default function ProfileScreen() {
     }
 
     useEffect(() => {
-        getData();
-    }, []);
+        getData().then(() => setRefresh(false))
+    }, [refresh]);
 
     // data?.userprofile?.image
     // data?.username
@@ -42,7 +44,9 @@ export default function ProfileScreen() {
     return (
         <SafeAreaView>
             {data ?
-                <ScrollView contentInsetAdjustmentBehavior="automatic">
+                <ScrollView contentInsetAdjustmentBehavior="automatic"
+                            refreshControl={<RefreshControl refreshing={refresh} onRefresh={() => setRefresh(true)}/>}
+                >
                     <View>
                         <Card mode={"contained"} style={{padding: 20, margin: 5}}>
                             <Card.Title
