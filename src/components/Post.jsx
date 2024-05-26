@@ -1,8 +1,8 @@
-import React from 'react';
-import {Image, StyleSheet, Text, View} from "react-native";
+import React, {useState} from 'react';
+import {Image, StyleSheet, View} from "react-native";
 import Comment from "./Comment";
 import {formatDate} from "../helpers";
-import {Avatar} from "react-native-paper";
+import {Avatar, Card, Text} from "react-native-paper";
 
 
 /**
@@ -16,20 +16,23 @@ import {Avatar} from "react-native-paper";
 export default function Post({creator, likes, createdDate, attachments, content, comments}) {
     // const date = new Date(createdDate);
     const {username, userprofile} = creator;
+    const [valid, setValid] = useState(true)
 
     return <>
-        <View style={{marginBottom: 15}}>
+        <Card mode={"elevated"} style={{margin: 10, padding:5}}>
             <View>
-                <Avatar.Image size={50} source={{uri: userprofile?.image}} />
+                <Avatar.Image size={50} source={{uri: userprofile?.image}}/>
                 <Text> {username}</Text>
             </View>
             <Text> {likes.length} likes </Text>
             <Text> {formatDate(createdDate)} </Text>
             {attachments &&
                 attachments.map((attachment) => (
+                        valid &&
                         <Image key={attachment?.id}
                                source={{uri: attachment?.attachment}}
                                style={styles.attachmentImage}
+                               onError={() => setValid(false)}
                         />
                     )
                 )
@@ -41,7 +44,7 @@ export default function Post({creator, likes, createdDate, attachments, content,
                     )
                 )
             }
-        </View>
+        </Card>
     </>
 }
 

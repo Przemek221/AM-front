@@ -29,7 +29,7 @@ const LoginScreen = () => {
             .then(responseJson => {
                 AsyncStorage.setItem(authTokenNames.access_token, responseJson.access)
                     .catch(error => console.error(error));
-                AsyncStorage.setItem(authTokenNames.access_token, responseJson.refresh)
+                AsyncStorage.setItem(authTokenNames.refresh_token, responseJson.refresh)
                     .catch(error => console.error(error));
                 setUserSignedIn(true);
             })
