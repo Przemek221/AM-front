@@ -5,11 +5,13 @@ import {authTokenNames} from "../helpers";
 import {AuthContext} from "../../App";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {debugLogin} from "../debug";
+import {useTranslation} from "react-i18next";
 
 const LoginScreen = () => {
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
     const {setUserSignedIn} = React.useContext(AuthContext);
+    const { t} = useTranslation();
 
     const handleLogin = () => {
         const data = {
@@ -40,14 +42,14 @@ const LoginScreen = () => {
         <>
             <View style={styles.container}>
                 <TextInput
-                    label="Username"
+                    label={t('username')}
                     value={username}
                     onChangeText={setUsername}
                     mode="outlined"
                     style={styles.input}
                 />
                 <TextInput
-                    label="Password"
+                    label={t('password')}
                     value={password}
                     onChangeText={setPassword}
                     secureTextEntry
@@ -55,7 +57,8 @@ const LoginScreen = () => {
                     style={styles.input}
                 />
                 <Button mode="contained" onPress={handleLogin} style={styles.button}>
-                    Login
+                    {/*Login*/}
+                    {t('login')}
                 </Button>
                 <Button mode="contained" onPress={() => {
                     debugLogin(setUserSignedIn)

@@ -17,6 +17,8 @@ import {MD3DarkTheme, MD3LightTheme, adaptNavigationTheme,} from 'react-native-p
 import merge from 'deepmerge';
 import SettingsScreen from "./src/screens/SettingsScreen";
 import PostDetailsScreen from "./src/screens/PostDetailsScreen";
+import myTranslation from "./src/translations/i18n";
+import {useTranslation} from "react-i18next";
 
 const {LightTheme, DarkTheme} = adaptNavigationTheme({
     reactNavigationLight: NavigationDefaultTheme,
@@ -77,6 +79,7 @@ function HomeTabNavigation() {
 export default function App() {
     const [userSignedIn, setUserSignedIn] = React.useState(false);
     const [isThemeDark, setIsThemeDark] = React.useState(false);
+    const {t} = useTranslation();
 
     let theme = isThemeDark ? CombinedDarkTheme : CombinedDefaultTheme;
 
@@ -105,7 +108,7 @@ export default function App() {
                                                   options={{headerShown: false}}
                                     />
                                     <Stack.Screen name="PostDetails" component={PostDetailsScreen}
-                                                  options={{title: "Post Details"}}
+                                                  options={{title: ''}}
                                     />
                                 </Stack.Navigator>
                                 : <Tab.Navigator labeled={false}>

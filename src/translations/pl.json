@@ -1,0 +1,19 @@
+{
+  "translation": {
+    "login": "Zaloguj",
+    "logout": "Wyloguj",
+    "register": "Zarejestruj",
+    "username": "Nazwa użytkownika",
+    "password": "Hasło",
+    "passwordConfirm": "Potwierdź hasło",
+    "description": "Opis",
+    "addPhoto": "Dodaj zdjęcie",
+    "createPost": "Utwórz post",
+    "settings": "Ustawienia",
+    "darkTheme": "Ciemny motyw",
+    "language": "Język",
+    "postDetails": "Szczegóły Posta",
+    "postDescRequired": "Opis posta jest wymagany",
+    "somethingWentWrong": "Coś poszło nie tak, spróbuj ponownie."
+  }
+}

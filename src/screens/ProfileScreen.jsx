@@ -9,11 +9,14 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import {authTokenNames} from "../helpers";
 import Post from "../components/Post";
 import {ActivityIndicator, Avatar, Card} from "react-native-paper";
+import {useNavigation} from "@react-navigation/native";
 
 
 export default function ProfileScreen() {
     const [data, setData] = useState(null);
     const [refresh, setRefresh] = useState(false);
+    const navigation = useNavigation();
+
     const getData = async () => {
         try {
             const token = await AsyncStorage.getItem(authTokenNames.access_token)
@@ -37,6 +40,10 @@ export default function ProfileScreen() {
         getData().then(() => setRefresh(false))
     }, [refresh]);
 
+    const handlePressPost = (postId) => {
+        navigation.navigate('PostDetails');
+    }
+
     // data?.userprofile?.image
     // data?.username
     // data?.email
@@ -45,7 +52,9 @@ export default function ProfileScreen() {
         <SafeAreaView>
             {data ?
                 <ScrollView contentInsetAdjustmentBehavior="automatic"
-                            refreshControl={<RefreshControl refreshing={refresh} onRefresh={() => setRefresh(true)}/>}
+                            refreshControl={
+                                <RefreshControl refreshing={refresh} onRefresh={() => setRefresh(true)}/>
+                            }
                 >
                     <View>
                         <Card mode={"contained"} style={{padding: 20, margin: 5}}>
@@ -58,15 +67,15 @@ export default function ProfileScreen() {
                             />
 
                         </Card>
-                        {/*<Text>*/}
-                        {/*    /!*{console.log(data)}*!/*/}
-                        {/*    /!*Profile screen*!/*/}
-                        {/*    <Avatar.Image size={50} source={{uri: data?.userprofile?.image}}/>*/}
-                        {/*    <Text> {data?.username}</Text>*/}
-                        {/*</Text>*/}
                     </View>
                     <View>
-                        {data?.user_posts.map((post) => (<Post key={post?.id} {...post}  />))}
+                        {data?.user_posts.map((post) => (
+                            <Post key={post?.id} {...post}
+                                  handlePressPost={() => {
+                                      handlePressPost(post?.id);
+                                  }}
+                            />
+                        ))}
                     </View>
                 </ScrollView>
                 :

@@ -4,11 +4,13 @@ import {Dialog, Button, Portal, TextInput, Text, PaperProvider} from 'react-nati
 import * as ImagePicker from 'react-native-image-picker';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {authTokenNames} from "../helpers";
+import {useTranslation} from "react-i18next";
 
 const CreatePostScreen = () => {
     const [photo, setPhoto] = useState(null);
     const [postDescription, setPostDescription] = useState("");
     const [dialog, setDialog] = useState({visible: false, content: ""});
+    const { t} = useTranslation();
 
     const handleChoosePhoto = () => {
         const options = {noData: true,};
@@ -22,7 +24,7 @@ const CreatePostScreen = () => {
     };
     const handleSubmit = async () => {
         if (postDescription === "") {
-            setDialog({visible: true, content: "Post description is required"});
+            setDialog({visible: true, content: t('postDescRequired')});
             return;
         }
 
@@ -55,7 +57,7 @@ const CreatePostScreen = () => {
                 console.log(responseJson)
             })
             .catch(error => {
-                setDialog({visible: true, content: "Something went wrong, please try again."});
+                setDialog({visible: true, content: t('somethingWentWrong')});
                 console.error(error)
             });
     };
@@ -69,15 +71,15 @@ const CreatePostScreen = () => {
                 </Dialog>
             </Portal>
             <View style={styles.container}>
-                <TextInput label="Description"
+                <TextInput label={t('description')}
                            value={postDescription}
                            onChangeText={text => setPostDescription(text)}
                            style={styles.description}
                            multiline={true}
                 />
-                <Button onPress={handleChoosePhoto} mode={"contained-tonal"} style={styles.button}>Add Photo</Button>
+                <Button onPress={handleChoosePhoto} mode={"contained-tonal"} style={styles.button}>{t('addPhoto')}</Button>
                 {photo && (<Image source={{uri: photo.uri}} style={styles.photo}/>)}
-                <Button onPress={handleSubmit} mode={"contained"} style={styles.button}>Create Post</Button>
+                <Button onPress={handleSubmit} mode={"contained"} style={styles.button}>{t('createPost')}</Button>
             </View>
         </>
     );

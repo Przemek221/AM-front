@@ -1,11 +1,13 @@
 import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {TextInput, Button} from 'react-native-paper';
+import {useTranslation} from "react-i18next";
 
 const RegisterScreen = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [confirmedPassword, setConfirmedPassword] = useState('');
+    const { t} = useTranslation();
 
     const handleRegister = () => {
         console.log('Register...');
@@ -14,14 +16,14 @@ const RegisterScreen = () => {
     return (
         <View style={styles.container}>
             <TextInput
-                label="Username"
+                label={t('username')}
                 value={username}
                 onChangeText={setUsername}
                 mode="outlined"
                 style={styles.input}
             />
             <TextInput
-                label="Password"
+                label={t('password')}
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry
@@ -29,7 +31,7 @@ const RegisterScreen = () => {
                 style={styles.input}
             />
             <TextInput
-                label="Password Confirmation"
+                label={t('passwordConfirm')}
                 value={confirmedPassword}
                 onChangeText={setConfirmedPassword}
                 secureTextEntry
@@ -37,7 +39,7 @@ const RegisterScreen = () => {
                 style={styles.input}
             />
             <Button mode="contained" onPress={handleRegister} style={styles.button}>
-                Register
+                {t('register')}
             </Button>
         </View>
     );

@@ -1,0 +1,19 @@
+{
+  "translation": {
+    "login": "Login",
+    "logout": "Logout",
+    "register": "Register",
+    "username": "Username",
+    "password": "Password",
+    "passwordConfirm": "Password Confirmation",
+    "description": "Description",
+    "addPhoto": "Add Photo",
+    "createPost": "Create Post",
+    "settings": "Settings",
+    "darkTheme": "Dark Theme",
+    "language": "Language",
+    "postDetails": "Post Details",
+    "postDescRequired": "Post description is required",
+    "somethingWentWrong": "Something went wrong, please try again."
+  }
+}
