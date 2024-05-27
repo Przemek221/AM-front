@@ -5,8 +5,6 @@ import {authTokenNames, formatDate} from "../helpers";
 import {Avatar, Card, Modal, Portal, Text} from "react-native-paper";
 import LikeButton from "./LikeButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {useNavigation} from "@react-navigation/native";
-import PostDetailsScreen from "../screens/PostDetailsScreen";
 
 /**
  * @param {number} id
@@ -16,12 +14,11 @@ import PostDetailsScreen from "../screens/PostDetailsScreen";
  * @param {Array} attachments
  * @param {Array} comments
  * @param {String} content
+ * @param {function} handlePressPost
  */
-export default function Post({id, creator, likes, createdDate, attachments, content, comments}) {
-    // const date = new Date(createdDate);
+export default function Post({id, creator, likes, createdDate, attachments, content, comments, handlePressPost}) {
     const {username, userprofile} = creator;
     const [valid, setValid] = useState(true);
-    const [visible, setVisible] = React.useState(false);
 
     const handleLike = async () => {
         const token = await AsyncStorage.getItem(authTokenNames.access_token);
@@ -47,29 +44,7 @@ export default function Post({id, creator, likes, createdDate, attachments, cont
 
     const containerStyle = {backgroundColor: 'white', padding: 20};
     return <>
-        {!comments &&
-
-            /*
-            *
-            * Maybe will be replaced by just different component
-            *
-            *
-            * */
-
-
-
-            <Portal>
-                <Modal visible={visible} onDismiss={() => setVisible(false)} contentContainerStyle={containerStyle}>
-                    {/*<Text>Example Modal.  Click outside this area to dismiss.</Text>*/}
-                    <PostDetailsScreen/>
-                </Modal>
-            </Portal>
-        }
-        {/*<Button style={{marginTop: 30}} onPress={showModal}>*/}
-        {/*    Show*/}
-        {/*</Button>*/}
-        {/*<PostDetailsScreen visible={visible}/>*/}
-        <Card mode={"elevated"} style={{margin: 10, padding: 5}} onPress={() => setVisible(true)}>
+        <Card mode={"elevated"} style={{margin: 10, padding: 5}} onPress={() => handlePressPost(true)}>
             <View>
                 <Avatar.Image size={50} source={{uri: userprofile?.image}}/>
                 <Text> {username}</Text>

@@ -1,16 +1,15 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {View, StyleSheet} from 'react-native';
 import {TextInput, Button} from 'react-native-paper';
-import NavigationButton from "../components/NavigationButton";
 import {authTokenNames} from "../helpers";
 import {AuthContext} from "../../App";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {debugLogin} from "../debug";
 
 const LoginScreen = () => {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const {userSignedIn, setUserSignedIn} = React.useContext(AuthContext);
+    const [username, setUsername] = React.useState('');
+    const [password, setPassword] = React.useState('');
+    const {setUserSignedIn} = React.useContext(AuthContext);
 
     const handleLogin = () => {
         const data = {
@@ -58,16 +57,11 @@ const LoginScreen = () => {
                 <Button mode="contained" onPress={handleLogin} style={styles.button}>
                     Login
                 </Button>
-
                 <Button mode="contained" onPress={() => {
-                    // console.log("click")
-                    // setUserSignedIn(true)
                     debugLogin(setUserSignedIn)
                 }} style={styles.button}>
                     debugLogin
                 </Button>
-
-                {/*<NavigationButton destination={"Register"} style={styles.button}>Register</NavigationButton>*/}
             </View>
         </>
     );

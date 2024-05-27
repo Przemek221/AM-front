@@ -1,4 +1,3 @@
-import {userSignedIn} from "./global";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const formatDate = (argDate) => {
@@ -13,10 +12,11 @@ export const authTokenNames = {
     refresh_token: 'refresh_token'
 }
 
-export const logout = async () => {
+export const removeTokenAndLogout = async () => {
     try {
         await AsyncStorage.removeItem(authTokenNames.access_token);
-        // localStorage.removeItem(authTokenNames.access_token);
+        // localStorage.removeItem(authTokenNames.refresh_token);
+    //     fetch etc.
     } catch (e) {
         console.error(e);
     }

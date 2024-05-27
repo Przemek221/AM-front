@@ -1,5 +1,9 @@
-import React, {useState} from 'react';
-import {NavigationContainer} from '@react-navigation/native';
+import React from 'react';
+import {
+    NavigationContainer,
+    DarkTheme as NavigationDarkTheme,
+    DefaultTheme as NavigationDefaultTheme,
+} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import HomeScreen from "./src/screens/HomeScreen";
 import ProfileScreen from "./src/screens/ProfileScreen";
@@ -8,45 +12,123 @@ import RegisterScreen from "./src/screens/RegisterScreen";
 import CreatePostScreen from "./src/screens/CreatePostScreen";
 import {createMaterialBottomTabNavigator} from 'react-native-paper/react-navigation';
 import {SafeAreaProvider} from "react-native-safe-area-context";
-import {PaperProvider} from 'react-native-paper';
+import {Icon, PaperProvider} from 'react-native-paper';
+import {MD3DarkTheme, MD3LightTheme, adaptNavigationTheme,} from 'react-native-paper';
+import merge from 'deepmerge';
+import SettingsScreen from "./src/screens/SettingsScreen";
+import PostDetailsScreen from "./src/screens/PostDetailsScreen";
 
+const {LightTheme, DarkTheme} = adaptNavigationTheme({
+    reactNavigationLight: NavigationDefaultTheme,
+    reactNavigationDark: NavigationDarkTheme,
+});
+const CombinedDefaultTheme = merge(MD3LightTheme, LightTheme);
+const CombinedDarkTheme = merge(MD3DarkTheme, DarkTheme);
 
-// const Stack = createNativeStackNavigator();
-const Stack = createMaterialBottomTabNavigator();
-
+const Stack = createNativeStackNavigator();
+const Tab = createMaterialBottomTabNavigator();
 export const AuthContext = React.createContext();
+export const PreferencesContext = React.createContext({
+    toggleTheme: () => {
+    },
+    isThemeDark: false,
+});
+
+const tabBarIconSize = 29
+
+function HomeTabNavigation() {
+    return (
+        <Tab.Navigator labeled={false}>
+            <Tab.Screen
+                name="Home"
+                component={HomeScreen}
+                renderIcon={'home'}
+                options={{
+                    tabBarIcon: (() =>
+                            <Icon source="home" size={tabBarIconSize}/>
+                    ),
+                }}
+            />
+            <Tab.Screen name="Profile" component={ProfileScreen}
+                        options={{
+                            tabBarIcon: (() =>
+                                    <Icon source="account-circle" size={tabBarIconSize}/>
+                            ),
+                        }}
+            />
+            <Tab.Screen name="CreatePost" component={CreatePostScreen}
+                        options={{
+                            tabBarIcon: (() =>
+                                    <Icon source="plus-thick" size={tabBarIconSize}/>
+                            ),
+                        }}
+            />
+            <Tab.Screen name="Settings" component={SettingsScreen}
+                        options={{
+                            tabBarIcon: (() =>
+                                    <Icon source="cog" size={tabBarIconSize}/>
+                            ),
+                        }}
+            />
+        </Tab.Navigator>
+    )
+}
 
 export default function App() {
-    const [userSignedIn, setUserSignedIn] = useState(false);
+    const [userSignedIn, setUserSignedIn] = React.useState(false);
+    const [isThemeDark, setIsThemeDark] = React.useState(false);
+
+    let theme = isThemeDark ? CombinedDarkTheme : CombinedDefaultTheme;
+
+    const toggleTheme = React.useCallback(() => {
+        return setIsThemeDark(isThemeDark => !isThemeDark);
+    }, [isThemeDark]);
+
+    const preferences = React.useMemo(
+        () => ({
+            toggleTheme,
+            isThemeDark,
+        }),
+        [toggleTheme, isThemeDark]
+    );
 
     return (
-        <NavigationContainer>
+        <PreferencesContext.Provider value={preferences}>
             <AuthContext.Provider value={{userSignedIn, setUserSignedIn}}>
                 <SafeAreaProvider>
-                    <PaperProvider>
-                        <Stack.Navigator>
+                    <PaperProvider theme={theme}>
+                        <NavigationContainer theme={theme}>
                             {userSignedIn
-                                ? <>
-                                    <Stack.Screen
-                                        name="Home"
-                                        component={HomeScreen}
-                                        // options={{title: 'Welcome'}}
-                                        // options={{ headerShown: false }}
+                                ?
+                                <Stack.Navigator>
+                                    <Stack.Screen name="HomeTabNavigation" component={HomeTabNavigation}
+                                                  options={{headerShown: false}}
                                     />
-                                    <Stack.Screen name="Profile" component={ProfileScreen}/>
-                                    <Stack.Screen name="CreatePost" component={CreatePostScreen}
-                                                  options={{title: "+"}}
+                                    <Stack.Screen name="PostDetails" component={PostDetailsScreen}
+                                                  options={{title: "Post Details"}}
                                     />
-                                </>
-                                : <>
-                                    <Stack.Screen name="Login" component={LoginScreen}/>
-                                    <Stack.Screen name="Register" component={RegisterScreen}/>
-                                </>
+                                </Stack.Navigator>
+                                : <Tab.Navigator labeled={false}>
+                                    <Tab.Screen name="Login" component={LoginScreen}
+                                                options={{
+                                                    tabBarIcon: (() =>
+                                                            <Icon source="login" size={tabBarIconSize}/>
+                                                    ),
+                                                }}
+                                    />
+                                    <Tab.Screen name="Register" component={RegisterScreen}
+                                                options={{
+                                                    tabBarIcon: (() =>
+                                                            <Icon source="account-plus" size={tabBarIconSize}/>
+                                                    ),
+                                                }}
+                                    />
+                                </Tab.Navigator>
                             }
-                        </Stack.Navigator>
+                        </NavigationContainer>
                     </PaperProvider>
                 </SafeAreaProvider>
             </AuthContext.Provider>
-        </NavigationContainer>
+        </PreferencesContext.Provider>
     );
 }
