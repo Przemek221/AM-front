@@ -19,6 +19,9 @@
     "update": "Zaktualizuj",
     "delete": "Usuń",
     "cancel": "Anuluj",
-    "deleteAlert": "Czy na pewno?"
+    "deleteAlert": "Czy na pewno?",
+    "allFieldsRequired": "Nie wszystkie wymagane pola zostały uzupełnione",
+    "passwordMismatch": "Hasła nie są takie same",
+    "userRegisterSuccess": "Rejestracja zakończona sukcesem"
   }
 }

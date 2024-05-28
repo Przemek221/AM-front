@@ -1,20 +1,64 @@
 import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
-import {TextInput, Button} from 'react-native-paper';
+import {TextInput, Button, Dialog, Text, Portal} from 'react-native-paper';
 import {useTranslation} from "react-i18next";
+import {useNavigation} from "@react-navigation/native";
 
 const RegisterScreen = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [confirmedPassword, setConfirmedPassword] = useState('');
-    const { t} = useTranslation();
+    const [dialog, setDialog] = useState({visible: false, content: ""});
+    const {t} = useTranslation();
+    const navigation = useNavigation();
+
+    const isFormValid = () => {
+        if (password === '' || confirmedPassword === '' || username === '') {
+            setDialog({visible: true, content: t('allFieldsRequired')});
+            return false;
+        }
+        if (password !== confirmedPassword) {
+            setDialog({visible: true, content: t('passwordMismatch')});
+            return false;
+        }
+        return true
+    }
+
+    const successMessage = () => {
+        navigation.navigate('Login');
+        setDialog({visible: true, content: t('userRegisterSuccess')});
+    }
 
     const handleRegister = () => {
-        console.log('Register...');
+        if (!isFormValid())
+            return;
+
+        const data = {
+            "username": username,
+            "password": password,
+        }
+        fetch('http://10.0.2.2:8000/api/users/', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data),
+        })
+            .then(response => {
+                if (!response.ok)
+                    throw new Error(JSON.stringify({code: response.status, message: response.statusText}));
+                successMessage();
+            })
+            .catch(error => console.error(error));
     };
 
     return (
         <View style={styles.container}>
+            <Portal>
+                <Dialog visible={dialog.visible} onDismiss={() => setDialog({visible: false, content: ""})}>
+                    <Dialog.Content>
+                        <Text variant="bodyMedium">{dialog.content}</Text>
+                    </Dialog.Content>
+                </Dialog>
+            </Portal>
             <TextInput
                 label={t('username')}
                 value={username}

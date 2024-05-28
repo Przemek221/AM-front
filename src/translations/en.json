@@ -19,6 +19,9 @@
     "update": "Update",
     "delete": "Delete",
     "cancel": "Cancel",
-    "deleteAlert": "Are you sure?"
+    "deleteAlert": "Are you sure?",
+    "allFieldsRequired": "Not all required fields are filled",
+    "passwordMismatch": "Passwords are not the same",
+    "userRegisterSuccess": "User registered succesfully"
   }
 }
