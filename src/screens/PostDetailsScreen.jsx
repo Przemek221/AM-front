@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Text, Button, ActivityIndicator} from 'react-native-paper';
+import {Button, ActivityIndicator} from 'react-native-paper';
 import {RefreshControl, SafeAreaView, ScrollView, StyleSheet, View} from "react-native";
 import {authTokenNames} from "../helpers";
 import Comment from "../components/Comment";
@@ -8,6 +8,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import {useTranslation} from "react-i18next";
 import DeleteDialog from "../components/DeleteDialog";
 import {useIsFocused, useNavigation} from "@react-navigation/native";
+import CommentCreateForm from "../components/CommentCreateForm";
 
 const dummy = {
     creator: {
@@ -118,9 +119,10 @@ export default function PostDetailsScreen({route}) {
 
                                 <Post {...data} handlePressPost={() => {
                                 }}/>
-                                <View style={styles.commentForm}>
-                                    <Text>{"Comment create form"}</Text>
-                                </View>
+                                {/*<View style={styles.commentForm}>*/}
+                                {/*    <Text>{"Comment create form"}</Text>*/}
+                                {/*</View>*/}
+                                <CommentCreateForm postId={postId} setRefresh={setRefresh}/>
 
                                 {commentsReversed.map((comment, key) => (
                                     <Comment {...comment} key={key} setRefresh={setRefresh}/>

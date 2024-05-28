@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {TextInput, Button, Dialog, Text, Portal} from 'react-native-paper';
 import {useTranslation} from "react-i18next";
-import {useNavigation} from "@react-navigation/native";
+import {useIsFocused, useNavigation} from "@react-navigation/native";
 
 const RegisterScreen = () => {
     const [username, setUsername] = useState('');
@@ -11,6 +11,7 @@ const RegisterScreen = () => {
     const [dialog, setDialog] = useState({visible: false, content: ""});
     const {t} = useTranslation();
     const navigation = useNavigation();
+    const isFocused = useIsFocused();
 
     const isFormValid = () => {
         if (password === '' || confirmedPassword === '' || username === '') {
@@ -49,6 +50,14 @@ const RegisterScreen = () => {
             })
             .catch(error => console.error(error));
     };
+
+    React.useEffect(() => {
+        if (!isFocused) {
+            setPassword('');
+            setConfirmedPassword('');
+            setUsername('');
+        }
+    }, [isFocused])
 
     return (
         <View style={styles.container}>

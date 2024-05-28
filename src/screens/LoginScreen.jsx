@@ -6,12 +6,14 @@ import {AuthContext} from "../../App";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {debugLogin} from "../debug";
 import {useTranslation} from "react-i18next";
+import {useIsFocused} from "@react-navigation/native";
 
 const LoginScreen = () => {
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
     const {setUserSignedIn} = React.useContext(AuthContext);
-    const { t} = useTranslation();
+    const {t} = useTranslation();
+    const isFocused = useIsFocused();
 
     const handleLogin = () => {
         const data = {
@@ -37,6 +39,13 @@ const LoginScreen = () => {
             })
             .catch(error => console.error(error));
     };
+
+    React.useEffect(() => {
+        if (!isFocused) {
+            setPassword('');
+            setUsername('');
+        }
+    }, [isFocused])
 
     return (
         <>

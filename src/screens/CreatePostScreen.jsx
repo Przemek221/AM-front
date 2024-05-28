@@ -1,16 +1,18 @@
 import React, {useState} from 'react';
-import {Image, Platform, StyleSheet, View} from 'react-native';
-import {Dialog, Button, Portal, TextInput, Text, PaperProvider} from 'react-native-paper';
+import {Image, Keyboard, Platform, StyleSheet, View} from 'react-native';
+import {Dialog, Button, Portal, TextInput, Text} from 'react-native-paper';
 import * as ImagePicker from 'react-native-image-picker';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {authTokenNames} from "../helpers";
 import {useTranslation} from "react-i18next";
+import {useNavigation} from "@react-navigation/native";
 
 const CreatePostScreen = () => {
     const [photo, setPhoto] = useState(null);
     const [postDescription, setPostDescription] = useState("");
     const [dialog, setDialog] = useState({visible: false, content: ""});
-    const { t} = useTranslation();
+    const {t} = useTranslation();
+    const navigation = useNavigation();
 
     const handleChoosePhoto = () => {
         const options = {noData: true,};
@@ -51,10 +53,10 @@ const CreatePostScreen = () => {
             .then(response => {
                 if (!response.ok)
                     throw new Error(JSON.stringify({code: response.status, message: response.statusText}));
-                return response.json()
-            })
-            .then(responseJson => {
-                console.log(responseJson)
+                setPostDescription('');
+                setPhoto(null);
+                Keyboard.dismiss();
+                navigation.navigate("Home");
             })
             .catch(error => {
                 setDialog({visible: true, content: t('somethingWentWrong')});
@@ -77,7 +79,8 @@ const CreatePostScreen = () => {
                            style={styles.description}
                            multiline={true}
                 />
-                <Button onPress={handleChoosePhoto} mode={"contained-tonal"} style={styles.button}>{t('addPhoto')}</Button>
+                <Button onPress={handleChoosePhoto} mode={"contained-tonal"}
+                        style={styles.button}>{t('addPhoto')}</Button>
                 {photo && (<Image source={{uri: photo.uri}} style={styles.photo}/>)}
                 <Button onPress={handleSubmit} mode={"contained"} style={styles.button}>{t('createPost')}</Button>
             </View>
