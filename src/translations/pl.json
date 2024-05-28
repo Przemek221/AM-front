@@ -14,6 +14,11 @@
     "language": "Język",
     "postDetails": "Szczegóły Posta",
     "postDescRequired": "Opis posta jest wymagany",
-    "somethingWentWrong": "Coś poszło nie tak, spróbuj ponownie."
+    "somethingWentWrong": "Coś poszło nie tak, spróbuj ponownie.",
+    "likeAmountName": "Polubień",
+    "update": "Zaktualizuj",
+    "delete": "Usuń",
+    "cancel": "Anuluj",
+    "deleteAlert": "Czy na pewno?"
   }
 }

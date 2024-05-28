@@ -9,13 +9,16 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import {authTokenNames} from "../helpers";
 import Post from "../components/Post";
 import {ActivityIndicator, Avatar, Card} from "react-native-paper";
-import {useNavigation} from "@react-navigation/native";
+import {useIsFocused, useNavigation} from "@react-navigation/native";
 
 
 export default function ProfileScreen() {
     const [data, setData] = useState(null);
     const [refresh, setRefresh] = useState(false);
     const navigation = useNavigation();
+    const isFocused = useIsFocused();
+
+    const posts = data ? [...data?.user_posts].reverse() : [];
 
     const getData = async () => {
         try {
@@ -37,11 +40,13 @@ export default function ProfileScreen() {
     }
 
     useEffect(() => {
-        getData().then(() => setRefresh(false))
-    }, [refresh]);
+        if (isFocused || refresh) {
+            getData().then(() => setRefresh(false))
+        }
+    }, [refresh, isFocused]);
 
     const handlePressPost = (postId) => {
-        navigation.navigate('PostDetails');
+        navigation.navigate('PostDetails', {postId: postId});
     }
 
     // data?.userprofile?.image
@@ -50,7 +55,7 @@ export default function ProfileScreen() {
     // data?.user_posts
     return (
         <SafeAreaView>
-            {data ?
+            {data != null ?
                 <ScrollView contentInsetAdjustmentBehavior="automatic"
                             refreshControl={
                                 <RefreshControl refreshing={refresh} onRefresh={() => setRefresh(true)}/>
@@ -69,11 +74,10 @@ export default function ProfileScreen() {
                         </Card>
                     </View>
                     <View>
-                        {data?.user_posts.map((post) => (
+                        {/*{data?.user_posts?.map((post) => (*/}
+                        {posts.map((post) => (
                             <Post key={post?.id} {...post}
-                                  handlePressPost={() => {
-                                      handlePressPost(post?.id);
-                                  }}
+                                  handlePressPost={handlePressPost}
                             />
                         ))}
                     </View>

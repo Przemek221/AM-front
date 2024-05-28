@@ -14,6 +14,11 @@
     "language": "Language",
     "postDetails": "Post Details",
     "postDescRequired": "Post description is required",
-    "somethingWentWrong": "Something went wrong, please try again."
+    "somethingWentWrong": "Something went wrong, please try again.",
+    "likeAmountName": "Likes",
+    "update": "Update",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "deleteAlert": "Are you sure?"
   }
 }

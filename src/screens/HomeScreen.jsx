@@ -7,15 +7,26 @@ import {
 } from 'react-native';
 import {ActivityIndicator} from 'react-native-paper';
 import Post from "../components/Post";
-import {useNavigation} from "@react-navigation/native";
+import {useIsFocused, useNavigation} from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import {authTokenNames} from "../helpers";
 
 export default function HomeScreen() {
     const [data, setData] = useState(null);
     const [refresh, setRefresh] = useState(false);
     const navigation = useNavigation();
+    const isFocused = useIsFocused();
+
     const getData = async () => {
         try {
-            const response = await fetch('http://10.0.2.2:8000/api/posts/?page=2')
+            const token = await AsyncStorage.getItem(authTokenNames.access_token);
+            const options = {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            }
+            const response = await fetch('http://10.0.2.2:8000/api/posts/', options)
             if (!response.ok) {
                 throw new Error(JSON.stringify({code: response.status, message: response.statusText}))
             }
@@ -26,11 +37,13 @@ export default function HomeScreen() {
     }
 
     useEffect(() => {
-        getData().then(() => setRefresh(false))
-    }, [refresh]);
+        if (isFocused || refresh) {
+            getData().then(() => setRefresh(false));
+        }
+    }, [refresh, isFocused]);
 
     const handlePressPost = (postId) => {
-        navigation.navigate('PostDetails');
+        navigation.navigate('PostDetails', {postId: postId});
     }
 
     return (
@@ -43,9 +56,7 @@ export default function HomeScreen() {
                     <View>
                         {data ?
                             (data?.results.map((post) => (
-                                    <Post key={post?.id} {...post} handlePressPost={()=> {
-                                        handlePressPost(post?.id);
-                                    }}/>))
+                                    <Post key={post?.id} {...post} handlePressPost={handlePressPost}/>))
                             )
                             : (<ActivityIndicator animating={true}/>)
                         }
