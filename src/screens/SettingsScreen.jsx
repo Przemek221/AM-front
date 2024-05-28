@@ -2,8 +2,9 @@ import React from 'react';
 import {View, StyleSheet} from 'react-native';
 import {List, Switch, Button, Appbar, useTheme} from 'react-native-paper';
 import {PreferencesContext, AuthContext} from "../../App";
-import {removeTokenAndLogout} from "../helpers";
+import {authTokenNames} from "../helpers";
 import {useTranslation} from "react-i18next";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function SettingsScreen() {
     const theme = useTheme();
@@ -12,9 +13,32 @@ export default function SettingsScreen() {
     const {t, i18n} = useTranslation();
 
     const onToggleSwitch = () => toggleTheme(!isThemeDark);
-    const handleLogout = () => {
-        removeTokenAndLogout();
-        setUserSignedIn(false);
+    const sendLogoutRequest = async () => {
+        const token = await AsyncStorage.getItem(authTokenNames.access_token)
+        const token_refresh = await AsyncStorage.getItem(authTokenNames.refresh_token)
+        const options = {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: {
+                'refresh': `${token_refresh}`
+            }
+        }
+        const response = await fetch('http://10.0.2.2:8000/api/logout/', options)
+        if (!response.ok)
+            throw new Error(JSON.stringify({code: response.status, message: response.statusText}))
+    }
+    const handleLogout = async () => {
+        try {
+            await sendLogoutRequest();
+            await AsyncStorage.removeItem(authTokenNames.access_token);
+            // localStorage.removeItem(authTokenNames.refresh_token);
+            setUserSignedIn(false);
+        } catch (e) {
+            console.error(e);
+        }
     }
 
     const handleLanguageChange = (languageId) => {

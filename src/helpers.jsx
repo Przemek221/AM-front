@@ -11,13 +11,3 @@ export const authTokenNames = {
     access_token: 'access_token',
     refresh_token: 'refresh_token'
 }
-
-export const removeTokenAndLogout = async () => {
-    try {
-        await AsyncStorage.removeItem(authTokenNames.access_token);
-        // localStorage.removeItem(authTokenNames.refresh_token);
-    //     fetch etc.
-    } catch (e) {
-        console.error(e);
-    }
-}
