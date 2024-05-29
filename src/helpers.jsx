@@ -1,4 +1,3 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const formatDate = (argDate) => {
     const date = new Date(argDate);
@@ -10,4 +9,11 @@ export const formatDate = (argDate) => {
 export const authTokenNames = {
     access_token: 'access_token',
     refresh_token: 'refresh_token'
+}
+
+export const isImage = (uri) => {
+    const supportedImageTypes = ['jpg', 'png', 'jpeg', 'gif', 'bmp'];
+    const uriParts = uri.toLowerCase().split('.');
+    const fileType = uriParts[uriParts.length - 1];
+    return supportedImageTypes.includes(fileType);
 }

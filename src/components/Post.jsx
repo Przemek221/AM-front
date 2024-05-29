@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Image, StyleSheet, View} from "react-native";
-import {formatDate} from "../helpers";
+import {formatDate, isImage} from "../helpers";
 import {Avatar, Card, Text} from "react-native-paper";
 import LikeButton from "./LikeButton";
 
@@ -27,7 +27,6 @@ export default function Post({
                                  requestUserLiked
                              }) {
     const {username, userprofile} = creator;
-    const [valid, setValid] = useState(true);
 
     return <>
         <Card mode={"elevated"} style={styles.card} onPress={() => handlePressPost(id)}>
@@ -37,15 +36,12 @@ export default function Post({
             </View>
             <Text style={styles.date}> {formatDate(createdDate)} </Text>
             {attachments &&
-                attachments.map((attachment) => (
-                        valid &&
-                        <Image key={attachment?.id}
-                               source={{uri: attachment?.attachment}}
-                               style={styles.attachmentImage}
-                               onError={() => setValid(false)}
-                        />
-                    )
-                )
+                <View style={styles.attachments}>
+                    {attachments.map((attachment) => (
+                        isImage(attachment?.attachment) &&
+                        <Image key={attachment?.id} source={{uri: attachment?.attachment}} style={styles.image}/>
+                    ))}
+                </View>
             }
             <Text style={styles.text}> {content} </Text>
             <View style={styles.likeContainer}>
@@ -56,6 +52,16 @@ export default function Post({
 }
 
 const styles = StyleSheet.create({
+    attachments: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+    },
+    image: {
+        width: 180,
+        height: 250,
+        margin: 5,
+        objectFit: "contain",
+    },
     username: {
         fontWeight: "bold",
         fontSize: 20,

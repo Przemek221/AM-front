@@ -1,14 +1,14 @@
 import React, {useState} from 'react';
 import {Image, Keyboard, Platform, StyleSheet, View} from 'react-native';
-import {Dialog, Button, Portal, TextInput, Text} from 'react-native-paper';
+import {Dialog, Button, Portal, TextInput, Text, IconButton} from 'react-native-paper';
 import * as ImagePicker from 'react-native-image-picker';
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {authTokenNames} from "../helpers";
+import {authTokenNames, isImage} from "../helpers";
 import {useTranslation} from "react-i18next";
 import {useNavigation} from "@react-navigation/native";
 
 const CreatePostScreen = () => {
-    const [photo, setPhoto] = useState(null);
+    const [photos, setPhotos] = useState([]);
     const [postDescription, setPostDescription] = useState("");
     const [dialog, setDialog] = useState({visible: false, content: ""});
     const {t} = useTranslation();
@@ -20,25 +20,26 @@ const CreatePostScreen = () => {
             if (response.assets) response = response.assets[0];
             if (response.uri) {
                 if (!response.fileName) response.fileName = `${Date.now()}.jpg`;
-                setPhoto(response);
+                setPhotos([...photos, response]);
             }
         });
     };
     const handleSubmit = async () => {
-        if (postDescription === "") {
+        if (!postDescription) {
             setDialog({visible: true, content: t('postDescRequired')});
             return;
         }
 
         const data = new FormData();
-        if (photo !== null)
-            data.append('attachments', {
-                name: photo.fileName,
-                type: photo.type,
-                uri: Platform.OS === 'android' ? photo.uri : photo.uri.replace('file://', ''),
-            });
-        if (postDescription !== null)
-            data.append('content', postDescription);
+        photos.map(photo => {
+                data.append('attachments', {
+                    name: photo.fileName,
+                    type: photo.type,
+                    uri: Platform.OS === 'android' ? photo.uri : photo.uri.replace('file://', ''),
+                });
+            }
+        );
+        data.append('content', postDescription);
 
         const token = await AsyncStorage.getItem(authTokenNames.access_token);
 
@@ -54,7 +55,7 @@ const CreatePostScreen = () => {
                 if (!response.ok)
                     throw new Error(JSON.stringify({code: response.status, message: response.statusText}));
                 setPostDescription('');
-                setPhoto(null);
+                setPhotos([]);
                 Keyboard.dismiss();
                 navigation.navigate("Home");
             })
@@ -63,6 +64,11 @@ const CreatePostScreen = () => {
                 console.error(error)
             });
     };
+
+    const handleRemovePhotos = (index) => {
+        setPhotos(photos.filter((_, i) => i !== index));
+    };
+
     return (
         <>
             <Portal>
@@ -80,8 +86,24 @@ const CreatePostScreen = () => {
                            multiline={true}
                 />
                 <Button onPress={handleChoosePhoto} mode={"contained-tonal"}
-                        style={styles.button}>{t('addPhoto')}</Button>
-                {photo && (<Image source={{uri: photo.uri}} style={styles.photo}/>)}
+                        style={styles.button}>
+                    {t('addPhoto')}
+                </Button>
+                <View style={styles.attachments}>
+                    {photos.map((attachment, index) => (
+                        isImage(attachment.uri) &&
+                        <View key={index} style={styles.imageContainer}>
+                            <Image source={{uri: attachment.uri}} style={styles.image}/>
+                            <IconButton
+                                style={styles.deleteIcon}
+                                iconColor={"crimson"}
+                                icon="delete"
+                                size={20}
+                                onPress={() => handleRemovePhotos(index)}
+                            />
+                        </View>
+                    ))}
+                </View>
                 <Button onPress={handleSubmit} mode={"contained"} style={styles.button}>{t('createPost')}</Button>
             </View>
         </>
@@ -90,6 +112,15 @@ const CreatePostScreen = () => {
 export default CreatePostScreen;
 
 const styles = StyleSheet.create({
+    attachments: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+    },
+    image: {
+        width: 100,
+        height: 100,
+        margin: 5,
+    },
     container: {
         flex: 1,
         padding: 20,
@@ -106,5 +137,10 @@ const styles = StyleSheet.create({
     },
     description: {
         marginBottom: 10,
+    },
+    deleteIcon: {
+        position: 'absolute',
+        top: 0,
+        right: 0,
     },
 });

@@ -43,7 +43,6 @@ const CommentCreateForm = ({setRefresh, postId}) => {
 
     return (
         <View style={styles.commentForm}>
-            {/*<Text>{"Comment create form"}</Text>*/}
             <TextInput
                 multiline={true}
                 label={t('comment')}
@@ -52,7 +51,8 @@ const CommentCreateForm = ({setRefresh, postId}) => {
                 mode="outlined"
                 style={styles.input}
             />
-            <IconButton icon="send" size={styles.commentCreateButton.size} style={styles.commentCreateButton} onPress={handleComment}/>
+            <IconButton icon="send" size={styles.commentCreateButton.size}
+                        style={styles.commentCreateButton} onPress={handleComment}/>
         </View>
     )
 }
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     commentCreateButton: {
-        size:25,
+        size: 25,
         flexDirection: "row",
     },
     input: {

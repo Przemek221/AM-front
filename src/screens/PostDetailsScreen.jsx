@@ -40,7 +40,6 @@ export default function PostDetailsScreen({route}) {
     const {postId} = route?.params;
     const navigation = useNavigation()
     const {t} = useTranslation();
-    // const [valid, setValid] = useState(true);
     const [refresh, setRefresh] = useState(false);
     const [data, setData] = useState(null);
     const [showDialog, setShowDialog] = React.useState(false);
@@ -71,9 +70,11 @@ export default function PostDetailsScreen({route}) {
         }
     }
 
-
     const navigateToHomePage = () => {
         navigation.navigate("HomeTabNavigation");
+    }
+    const updateButtonHandler = () => {
+        navigation.navigate("UpdatePost", {postId: postId});
     }
 
     useEffect(() => {
@@ -99,14 +100,14 @@ export default function PostDetailsScreen({route}) {
                                     <View style={styles.ownerButtonsContainer}>
                                         <Button mode={"text"}
                                                 onPress={() => {
-                                                    console.log("updateBtn")
+                                                    updateButtonHandler();
                                                 }}
                                                 style={styles.ownerButton}>
                                             {t("update")}
                                         </Button>
                                         <Button mode={"text"}
                                                 onPress={() => {
-                                                    setShowDialog(true)
+                                                    setShowDialog(true);
                                                 }}
                                                 style={styles.ownerButton}>
                                             {t("delete")}
@@ -119,11 +120,7 @@ export default function PostDetailsScreen({route}) {
 
                                 <Post {...data} handlePressPost={() => {
                                 }}/>
-                                {/*<View style={styles.commentForm}>*/}
-                                {/*    <Text>{"Comment create form"}</Text>*/}
-                                {/*</View>*/}
                                 <CommentCreateForm postId={postId} setRefresh={setRefresh}/>
-
                                 {commentsReversed.map((comment, key) => (
                                     <Comment {...comment} key={key} setRefresh={setRefresh}/>
                                 ))}

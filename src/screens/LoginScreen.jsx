@@ -4,7 +4,7 @@ import {TextInput, Button} from 'react-native-paper';
 import {authTokenNames} from "../helpers";
 import {AuthContext} from "../../App";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {debugLogin} from "../debug";
+import {DEBUG, debugLogin} from "../debug";
 import {useTranslation} from "react-i18next";
 import {useIsFocused} from "@react-navigation/native";
 
@@ -66,14 +66,15 @@ const LoginScreen = () => {
                     style={styles.input}
                 />
                 <Button mode="contained" onPress={handleLogin} style={styles.button}>
-                    {/*Login*/}
                     {t('login')}
                 </Button>
-                <Button mode="contained" onPress={() => {
-                    debugLogin(setUserSignedIn)
-                }} style={styles.button}>
-                    debugLogin
-                </Button>
+                {DEBUG &&
+                    <Button mode="contained" onPress={() => {
+                        debugLogin(setUserSignedIn)
+                    }} style={styles.button}>
+                        debugLogin
+                    </Button>
+                }
             </View>
         </>
     );
