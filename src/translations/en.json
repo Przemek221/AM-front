@@ -23,6 +23,14 @@
     "allFieldsRequired": "Not all required fields are filled",
     "passwordMismatch": "Passwords are not the same",
     "userRegisterSuccess": "User registered succesfully",
-    "comment": "Comment..."
+    "comment": "Comment...",
+    "updateProfile": "Update Profile",
+    "email": "E-mail",
+    "newPassword": "New password",
+    "changePassword": "Change password",
+    "userData": "User data",
+    "userDataUpdateSuccess": "User data has been updated successfully",
+    "userImageUpdateSuccess": "Profile image has been updated successfully",
+    "passwordUpdateSuccess": "Password has been updated successfully"
   }
 }

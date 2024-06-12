@@ -23,6 +23,14 @@
     "allFieldsRequired": "Nie wszystkie wymagane pola zostały uzupełnione",
     "passwordMismatch": "Hasła nie są takie same",
     "userRegisterSuccess": "Rejestracja zakończona sukcesem",
-    "comment": "Skomentuj..."
+    "comment": "Skomentuj...",
+    "updateProfile": "Zaktualizuj Profil",
+    "email": "E-mail",
+    "newPassword": "Nowe hasło",
+    "changePassword": "Zmień hasło",
+    "userData": "Dane użytkownika",
+    "userDataUpdateSuccess": "Dane użytkownika zostały pomyślnie zaktualizowane",
+    "userImageUpdateSuccess": "Zdjęcie profilowe zostało pomyślnie zaktualizowane",
+    "passwordUpdateSuccess": "Hasło zostało pomyślnie zaktualizowane"
   }
 }
