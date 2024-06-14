@@ -5,12 +5,14 @@ import {PreferencesContext, AuthContext} from "../../App";
 import {authTokenNames} from "../helpers";
 import {useTranslation} from "react-i18next";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {useNavigation} from "@react-navigation/native";
 
 export default function SettingsScreen() {
     const theme = useTheme();
     const {isThemeDark, toggleTheme} = React.useContext(PreferencesContext);
     const {userSignedIn, setUserSignedIn} = React.useContext(AuthContext);
     const {t, i18n} = useTranslation();
+    const navigation = useNavigation();
 
     const onToggleSwitch = () => toggleTheme(!isThemeDark);
     const sendLogoutRequest = async () => {
@@ -43,6 +45,9 @@ export default function SettingsScreen() {
 
     const handleLanguageChange = (languageId) => {
         i18n.changeLanguage(languageId)
+    }
+    const handleEditProfile = () => {
+        navigation.navigate("UpdateProfile");
     }
 
     return (
@@ -84,6 +89,9 @@ export default function SettingsScreen() {
                     />
                 </List.Accordion>
             </List.Section>
+            <Button mode={"outlined"} onPress={handleEditProfile} style={styles.button}>
+                {t('updateProfile')}
+            </Button>
             <Button mode={"contained"} onPress={handleLogout} style={styles.logoutButton}>
                 {t('logout')}
             </Button>
@@ -95,6 +103,9 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
+    },
+    button: {
+        marginTop: 10,
     },
     logoutButton: {
         marginTop: 30,

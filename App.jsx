@@ -20,6 +20,7 @@ import PostDetailsScreen from "./src/screens/PostDetailsScreen";
 import myTranslation from "./src/translations/i18n";
 import {useTranslation} from "react-i18next";
 import UpdatePostScreen from "./src/screens/UpdatePostScreen";
+import UpdateProfileScreen from "./src/screens/UpdateProfileScreen";
 
 const {LightTheme, DarkTheme} = adaptNavigationTheme({
     reactNavigationLight: NavigationDefaultTheme,
@@ -112,6 +113,9 @@ export default function App() {
                                                   options={{title: ''}}
                                     />
                                     <Stack.Screen name="UpdatePost" component={UpdatePostScreen}
+                                                  options={{title: ''}}
+                                    />
+                                    <Stack.Screen name="UpdateProfile" component={UpdateProfileScreen}
                                                   options={{title: ''}}
                                     />
                                 </Stack.Navigator>
