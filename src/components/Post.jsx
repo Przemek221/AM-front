@@ -3,6 +3,7 @@ import {Image, StyleSheet, View} from "react-native";
 import {formatDate, isImage} from "../helpers";
 import {Avatar, Card, Text} from "react-native-paper";
 import LikeButton from "./LikeButton";
+import CommentCounter from "./CommentCounter";
 
 /**
  * @param {number} id
@@ -11,6 +12,7 @@ import LikeButton from "./LikeButton";
  * @param {String} createdDate
  * @param {Array} attachments
  * @param {String} content
+ * @param {Array} comments
  * @param {function} handlePressPost
  * @param {boolean} requestUserIsOwner
  * @param {boolean} requestUserLiked
@@ -22,6 +24,7 @@ export default function Post({
                                  createdDate,
                                  attachments,
                                  content,
+                                 comments,
                                  handlePressPost,
                                  requestUserIsOwner,
                                  requestUserLiked
@@ -31,7 +34,7 @@ export default function Post({
     return <>
         <Card mode={"elevated"} style={styles.card} onPress={() => handlePressPost(id)}>
             <View style={styles.postCreatorContainer}>
-                <Avatar.Image size={50} source={{uri: userprofile?.image}}/>
+                <Avatar.Image size={45} source={{uri: userprofile?.image}}/>
                 <Text style={styles.username}> {username}</Text>
             </View>
             <Text style={styles.date}> {formatDate(createdDate)} </Text>
@@ -45,11 +48,14 @@ export default function Post({
             }
             <Text style={styles.text}> {content} </Text>
             <View style={styles.likeContainer}>
+                <CommentCounter postId={id} commentsAmount={comments.length} requestUserLiked={requestUserLiked}/>
                 <LikeButton postId={id} likesAmount={likes.length} requestUserLiked={requestUserLiked}/>
             </View>
         </Card>
     </>
 }
+
+
 
 const styles = StyleSheet.create({
     attachments: {
@@ -101,5 +107,5 @@ const styles = StyleSheet.create({
     text: {
         marginHorizontal: 10,
         fontSize: 16,
-    }
+    },
 });
